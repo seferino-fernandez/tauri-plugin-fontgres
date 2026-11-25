@@ -1,22 +1,22 @@
 {
-  "name": "tauri-plugin-system-fonts-api",
-  "version": "2.0.2",
-  "author": "ayangweb",
-  "description": "Support getting all fonts installed on your system.",
+  "name": "tauri-plugin-fontgres-api",
+  "version": "0.1.0",
+  "author": "Seferino Fernandez",
+  "description": "JavaScript bindings for tauri-plugin-fontgres: list the system's fonts and answer CSS-style font queries in Tauri v2.",
   "keywords": [
     "tauri",
     "tauri-plugin",
     "font",
     "fonts",
-    "system-font",
-    "system-fonts"
+    "system-fonts",
+    "fontgres"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ayangweb/tauri-plugin-system-fonts.git"
+    "url": "git+https://github.com/seferino-fernandez/tauri-plugin-fontgres.git"
   },
-  "homepage": "https://github.com/ayangweb/tauri-plugin-system-fonts#readme",
-  "bugs": "https://github.com/ayangweb/tauri-plugin-system-fonts/issues",
+  "homepage": "https://github.com/seferino-fernandez/tauri-plugin-fontgres#readme",
+  "bugs": "https://github.com/seferino-fernandez/tauri-plugin-fontgres/issues",
   "license": "MIT",
   "type": "module",
   "types": "./dist-js/index.d.ts",
@@ -34,17 +34,16 @@
   "scripts": {
     "build": "rollup -c",
     "prepublishOnly": "pnpm build",
-    "pretest": "pnpm build",
-    "release": "release-it"
+    "pretest": "pnpm build"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^12.0.0",
-    "release-it": "^19.0.5",
-    "rollup": "^4.9.6",
-    "tslib": "^2.6.2",
-    "typescript": "^5.3.3"
-  }
+    "@rollup/plugin-typescript": "^12.3.1",
+    "rollup": "^4.68.8",
+    "tslib": "^2.9.1",
+    "typescript": "^6.0.3"
+  },
+  "packageManager": "pnpm@12.23.0"
 }

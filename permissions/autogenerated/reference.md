@@ -1,10 +1,13 @@
 ## Default Permission
 
-Default permissions for the plugin
+Allows every command: listing the faces and families, querying a face and reloading the fonts.
 
 #### This default permission set includes the following:
 
-- `allow-get-system-fonts`
+- `allow-get-faces`
+- `allow-get-families`
+- `allow-query-face`
+- `allow-reload`
 
 ## Permission Table
 
@@ -18,12 +21,12 @@ Default permissions for the plugin
 <tr>
 <td>
 
-`system-fonts:allow-get-system-fonts`
+`fontgres:allow-get-faces`
 
 </td>
 <td>
 
-Enables the get_system_fonts command without any pre-configured scope.
+Enables the get_faces command without any pre-configured scope.
 
 </td>
 </tr>
@@ -31,12 +34,90 @@ Enables the get_system_fonts command without any pre-configured scope.
 <tr>
 <td>
 
-`system-fonts:deny-get-system-fonts`
+`fontgres:deny-get-faces`
 
 </td>
 <td>
 
-Denies the get_system_fonts command without any pre-configured scope.
+Denies the get_faces command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`fontgres:allow-get-families`
+
+</td>
+<td>
+
+Enables the get_families command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`fontgres:deny-get-families`
+
+</td>
+<td>
+
+Denies the get_families command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`fontgres:allow-query-face`
+
+</td>
+<td>
+
+Enables the query_face command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`fontgres:deny-query-face`
+
+</td>
+<td>
+
+Denies the query_face command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`fontgres:allow-reload`
+
+</td>
+<td>
+
+Enables the reload command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`fontgres:deny-reload`
+
+</td>
+<td>
+
+Denies the reload command without any pre-configured scope.
 
 </td>
 </tr>

@@ -10,20 +10,19 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2",
-    "ahooks": "^3.9.5",
-    "antd": "^5.27.6",
-    "es-toolkit": "^1.40.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "tauri-plugin-system-fonts-api": "file:../../"
+    "@tauri-apps/api": "^2.12.5",
+    "antd": "^6.7.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tauri-plugin-fontgres-api": "file:../../"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "@vitejs/plugin-react": "^4.6.0",
-    "typescript": "~5.8.3",
-    "vite": "^7.0.4"
-  }
+    "@tauri-apps/cli": "^2.12.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.8"
+  },
+  "packageManager": "pnpm@12.23.0"
 }

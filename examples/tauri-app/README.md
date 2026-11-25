@@ -1,7 +1,9 @@
-# Tauri + React + Typescript
+# tauri-plugin-fontgres example
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+A React app that lists every face `getFaces` returns, each drawn in its own font, runs `queryFace` on a comma-separated family list, and reloads the fonts.
 
-## Recommended IDE Setup
+From the repository root:
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+```shell
+just dev
+```

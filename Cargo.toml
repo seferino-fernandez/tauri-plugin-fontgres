@@ -1,21 +1,107 @@
 [package]
-name = "tauri-plugin-system-fonts"
-version = "2.0.2"
-authors = [ "ayangweb" ]
-description = "Support getting all fonts installed on your system."
-repository = "https://github.com/ayangweb/tauri-plugin-system-fonts"
-keywords = ["tauri", "tauri-plugin", "font", "fonts", "system-fonts"]
+name = "tauri-plugin-fontgres"
+version = "0.1.0"
+authors = ["Seferino Fernandez"]
+description = "Tauri v2 plugin that lists the system's fonts and answers CSS-style font queries, built on fontgres."
+repository = "https://github.com/seferino-fernandez/tauri-plugin-fontgres"
+keywords = ["tauri", "tauri-plugin", "fonts", "system-fonts", "fontgres"]
+categories = ["gui", "text-processing"]
 license = "MIT"
-edition = "2021"
-rust-version = "1.77.2"
-exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]
-links = "tauri-plugin-system-fonts"
+edition = "2024"
+rust-version = "1.100"
+include = ["/src", "/permissions", "/build.rs", "/README.md", "/LICENSE"]
+links = "tauri-plugin-fontgres"
 
 [dependencies]
 tauri = { version = "2" }
-serde = "1"
-thiserror = "2"
-fontdb = "0.23"
+serde = "1.0.229"
+thiserror = "2.0.21"
+
+# fontgres reads desktop font directories; on Android and iOS the commands
+# fail with Error::UnsupportedPlatform instead.
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+fontgres-core = { version = "0.4.0", features = ["serde"] }
+
+[dev-dependencies]
+serde_json = "1.0.154"
 
 [build-dependencies]
 tauri-plugin = { version = "2", features = ["build"] }
+
+[lints.rust]
+missing_docs = "warn"
+rust_2018_idioms = { level = "warn", priority = -1 }
+unreachable_pub = "warn"
+unsafe_code = "forbid"
+unused_lifetimes = "warn"
+unused_qualifications = "warn"
+
+[lints.rustdoc]
+bare_urls = "deny"
+broken_intra_doc_links = "deny"
+invalid_html_tags = "deny"
+invalid_rust_codeblocks = "deny"
+missing_crate_level_docs = "warn"
+private_intra_doc_links = "warn"
+redundant_explicit_links = "warn"
+unescaped_backticks = "warn"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+# Public accessors and builders do not need a must_use annotation on every return value.
+must_use_candidate = "allow"
+# Domain names such as config/configs and request/response remain readable together.
+similar_names = "allow"
+
+# Keep functions small, matches exhaustive, and output deliberate
+clone_on_ref_ptr = "warn"
+cognitive_complexity = "warn"
+exit = "warn"
+infinite_loop = "warn"
+print_stderr = "warn"
+print_stdout = "warn"
+redundant_clone = "warn"
+shadow_unrelated = "warn"
+wildcard_enum_match_arm = "warn"
+
+# Prevent panics from unwraps and unsafe slicing or indexing
+arithmetic_side_effects = "warn"
+expect_used = "warn"
+get_unwrap = "warn"
+indexing_slicing = "warn"
+panic = "warn"
+panic_in_result_fn = "warn"
+string_slice = "warn"
+todo = "warn"
+unimplemented = "warn"
+unreachable = "warn"
+unwrap_in_result = "warn"
+unwrap_used = "warn"
+
+# Prevent dropped futures and swallowed errors
+assertions_on_result_states = "warn"
+let_underscore_must_use = "warn"
+map_err_ignore = "warn"
+unused_result_ok = "warn"
+
+# Prevent unsafe things with memory
+mem_forget = "warn"
+multiple_unsafe_ops_per_block = "warn"
+undocumented_unsafe_blocks = "warn"
+unnecessary_safety_comment = "warn"
+unnecessary_safety_doc = "warn"
+
+# Prevent potentially incorrect things with numbers
+float_cmp_const = "warn"
+lossy_float_literal = "warn"
+
+# Don't Do Bad Things That are Easy to Avoid
+dbg_macro = "warn"
+debug_assert_with_mut_call = "warn"
+infallible_try_from = "warn"
+rc_mutex = "warn"
+
+# Don't `allow` Your Way Around These Lints - every suppression must be
+# a deliberate #[expect(..., reason = "…")] rather than a silent #[allow]
+allow_attributes = "warn"
+allow_attributes_without_reason = "warn"

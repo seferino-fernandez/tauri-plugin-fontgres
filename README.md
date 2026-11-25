@@ -121,7 +121,7 @@ just dev    # or: pnpm install && pnpm build && cd examples/tauri-app && pnpm in
 
 ## Contributing
 
-`just verify` runs every check CI runs. [AGENTS.md](AGENTS.md) lists what has to change together, and [docs/releasing.md](docs/releasing.md) how releases are published.
+`just verify` runs every check CI runs. [AGENTS.md](AGENTS.md) lists what has to change together.
 
 ## Thanks
 

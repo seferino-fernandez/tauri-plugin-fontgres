@@ -2,9 +2,6 @@
   "name": "tauri-plugin-fontgres-api",
   "version": "0.1.0",
   "author": "Seferino Fernandez",
-  "contributors": [
-    "ayangweb"
-  ],
   "description": "JavaScript bindings for tauri-plugin-fontgres: list the system's fonts and answer CSS-style font queries in Tauri v2.",
   "keywords": [
     "tauri",

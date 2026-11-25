@@ -3,7 +3,6 @@ name: Release
 # Pushing a v{version} tag runs the validation workflow on the tagged commit,
 # then publishes the crate to crates.io and the bindings to npm, both through
 # trusted publishing (no stored tokens), and creates the GitHub Release.
-# docs/releasing.md covers the process and the one-time setup.
 on:
     push:
         tags: ["v*"]

@@ -1,7 +1,7 @@
 [package]
 name = "tauri-plugin-fontgres"
 version = "0.1.0"
-authors = ["ayangweb", "Seferino Fernandez"]
+authors = ["Seferino Fernandez"]
 description = "Tauri v2 plugin that lists the system's fonts and answers CSS-style font queries, built on fontgres."
 repository = "https://github.com/seferino-fernandez/tauri-plugin-fontgres"
 keywords = ["tauri", "tauri-plugin", "fonts", "system-fonts", "fontgres"]

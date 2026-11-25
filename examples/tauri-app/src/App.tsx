@@ -72,8 +72,8 @@ const App = () => {
   };
 
   return (
-    <Space direction="vertical" style={{ width: "100%", padding: 16 }}>
-      {error && <Alert type="error" message={error} />}
+    <Space orientation="vertical" style={{ width: "100%", padding: 16 }}>
+      {error && <Alert type="error" title={error} />}
       <Space>
         <Typography.Text>
           {faces ? `${faces.length} faces in ${familyCount} families` : "Loading…"}

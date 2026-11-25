@@ -13,17 +13,17 @@ exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules", "/tests"]
 links = "tauri-plugin-fontgres"
 
 [dependencies]
-tauri = { version = "2" }
-serde = "1"
-thiserror = "2"
+tauri = { version = "2.12.7" }
+serde = "1.0.229"
+thiserror = "2.0.21"
 
 # fontgres reads desktop font directories; on Android and iOS the commands
 # fail with Error::UnsupportedPlatform instead.
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
-fontgres-core = { version = "0.4", features = ["serde"] }
+fontgres-core = { version = "0.4.0", features = ["serde"] }
 
 [dev-dependencies]
-serde_json = "1"
+serde_json = "1.0.154"
 
 [build-dependencies]
-tauri-plugin = { version = "2", features = ["build"] }
+tauri-plugin = { version = "2.7.4", features = ["build"] }

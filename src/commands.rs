@@ -1,6 +1,10 @@
 //! The commands JavaScript invokes as `plugin:fontgres|<name>`.
 
 #[cfg(desktop)]
+#[expect(
+    clippy::unreachable,
+    reason = "#[tauri::command] checks an async command's return type with `let _check: T = unreachable!()`"
+)]
 mod desktop {
     use fontgres_core::models::FontQuery;
     use tauri::State;
@@ -44,6 +48,10 @@ mod desktop {
 pub(crate) use desktop::*;
 
 #[cfg(mobile)]
+#[expect(
+    clippy::unreachable,
+    reason = "#[tauri::command] checks an async command's return type with `let _check: T = unreachable!()`"
+)]
 mod mobile {
     use serde::de::IgnoredAny;
 

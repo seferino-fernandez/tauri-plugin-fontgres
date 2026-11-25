@@ -1,0 +1,114 @@
+name: Pull Request Validation
+
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+    # release.yml runs the same checks on a tag before it publishes.
+    workflow_call:
+
+permissions:
+    contents: read
+
+env:
+    CARGO_TERM_COLOR: always
+    CARGO_INCREMENTAL: 0
+    RUSTFLAGS: -D warnings
+
+# Every action is pinned to a commit SHA followed by its # vX tag.
+# Each job installs the toolchain from rust-toolchain.toml with
+# `rustup toolchain install`, so CI and local builds use the same Rust.
+jobs:
+    rust:
+        name: Rust (${{ matrix.os }})
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest, macos-latest, windows-latest]
+        runs-on: ${{ matrix.os }}
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Install Tauri's Linux dependencies
+              if: runner.os == 'Linux'
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev libxdo-dev libssl-dev
+
+            - name: Install Rust toolchain
+              run: rustup toolchain install
+
+            - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+
+            - name: Check formatting
+              if: runner.os == 'Linux'
+              run: cargo fmt --all --check
+
+            - name: Run cargo clippy
+              run: cargo clippy --all-targets -- -D warnings
+
+            - name: Run tests
+              run: cargo test --all-targets
+
+            - name: Build docs
+              if: runner.os == 'Linux'
+              run: cargo doc --no-deps
+              env:
+                  RUSTDOCFLAGS: -D warnings
+
+            - name: Check the crate package
+              if: runner.os == 'Linux'
+              run: cargo publish --dry-run
+
+    javascript:
+        name: JavaScript bindings and example app
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+            - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version: "24"
+                  cache: pnpm
+                  cache-dependency-path: |
+                      pnpm-lock.yaml
+                      examples/tauri-app/pnpm-lock.yaml
+
+            - name: Build and type-check the bindings
+              run: |
+                  pnpm install --frozen-lockfile
+                  pnpm build
+                  pnpm exec tsc --noEmit -p .
+
+            - name: Check the npm package
+              run: npm pack --dry-run
+
+            - name: Build the example app's frontend
+              working-directory: examples/tauri-app
+              run: |
+                  pnpm install --frozen-lockfile
+                  pnpm build
+
+            - name: Install Tauri's Linux dependencies
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev libxdo-dev libssl-dev
+
+            - name: Install Rust toolchain
+              run: rustup toolchain install
+
+            - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+              with:
+                  workspaces: examples/tauri-app/src-tauri
+
+            # Also proves the example's capability can grant fontgres:default.
+            - name: Compile the example app
+              working-directory: examples/tauri-app/src-tauri
+              run: cargo check

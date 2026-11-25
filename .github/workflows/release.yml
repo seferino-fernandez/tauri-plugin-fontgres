@@ -1,0 +1,105 @@
+name: Release
+
+# Pushing a v{version} tag runs the validation workflow on the tagged commit,
+# then publishes the crate to crates.io and the bindings to npm, both through
+# trusted publishing (no stored tokens), and creates the GitHub Release.
+# docs/releasing.md covers the process and the one-time setup.
+on:
+    push:
+        tags: ["v*"]
+
+permissions: {}
+
+jobs:
+    validate:
+        uses: ./.github/workflows/pull-request-validation.yml
+        permissions:
+            contents: read
+
+    publish:
+        needs: validate
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write # the GitHub Release
+            id-token: write # trusted publishing to crates.io and npm
+        # Never cancel a release halfway between the two registries.
+        concurrency:
+            group: release
+            cancel-in-progress: false
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Check the tag matches both package versions
+              env:
+                  TAG: ${{ github.ref_name }}
+              run: |
+                  crate=$(sed -n 's/^version = "\(.*\)"$/\1/p' Cargo.toml | head -n 1)
+                  npm=$(node -p "require('./package.json').version")
+                  echo "tag $TAG, Cargo.toml $crate, package.json $npm"
+                  if [[ "$crate" != "$npm" || "$TAG" != "v$crate" ]]; then
+                      echo "::error::tag $TAG does not match Cargo.toml ($crate) and package.json ($npm)"
+                      exit 1
+                  fi
+                  echo "VERSION=$crate" >> "$GITHUB_ENV"
+
+            - name: Install Tauri's Linux dependencies
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev libxdo-dev libssl-dev
+
+            - name: Install Rust toolchain
+              run: rustup toolchain install
+
+            - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+            # Trusted publishing needs Node 22.14+ and npm 11.5.1+.
+            - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version: "24"
+                  registry-url: "https://registry.npmjs.org"
+                  package-manager-cache: false
+
+            - name: Update npm
+              run: npm install --global npm@11
+
+            - name: Install the bindings' dependencies
+              run: pnpm install --frozen-lockfile
+
+            # A rerun after a partial release skips what is already published.
+            - name: Check what is already published
+              id: published
+              run: |
+                  if curl -sf -A "tauri-plugin-fontgres release workflow" \
+                      "https://crates.io/api/v1/crates/tauri-plugin-fontgres/$VERSION" > /dev/null; then
+                      echo "crate=true" >> "$GITHUB_OUTPUT"
+                  fi
+                  if npm view "tauri-plugin-fontgres-api@$VERSION" version > /dev/null 2>&1; then
+                      echo "npm=true" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Authenticate with crates.io
+              if: steps.published.outputs.crate != 'true'
+              id: crates-io
+              uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9 # v1.0.6
+
+            - name: Publish the crate
+              if: steps.published.outputs.crate != 'true'
+              run: cargo publish
+              env:
+                  CARGO_REGISTRY_TOKEN: ${{ steps.crates-io.outputs.token }}
+
+            # prepublishOnly builds dist-js; npm adds provenance on its own.
+            - name: Publish the npm package
+              if: steps.published.outputs.npm != 'true'
+              run: npm publish
+
+            - name: Create the GitHub Release
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  TAG: ${{ github.ref_name }}
+              run: |
+                  if ! gh release view "$TAG" > /dev/null 2>&1; then
+                      gh release create "$TAG" --verify-tag --generate-notes --title "tauri-plugin-fontgres $TAG"
+                  fi

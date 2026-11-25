@@ -1,0 +1,15 @@
+allow-indexing-slicing-in-tests = true
+allow-panic-in-tests = true
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true
+allow-dbg-in-tests = true
+# Words `doc_markdown` accepts without backticks. ".." keeps clippy's defaults.
+doc-valid-idents = ["..", "JavaScript", "TypeScript", "CSS", "JSON", "UTF-8"]
+
+# Complexity budgets
+too-many-lines-threshold = 80
+cognitive-complexity-threshold = 15
+too-many-arguments-threshold = 5
+excessive-nesting-threshold = 5
+max-fn-params-bools = 2
+max-struct-bools = 3

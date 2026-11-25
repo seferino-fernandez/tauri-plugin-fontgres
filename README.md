@@ -3,7 +3,7 @@
 A [Tauri v2](https://v2.tauri.app) plugin that lists the fonts installed on the system and answers CSS-style font queries about them, built on [fontgres](https://github.com/seferino-fernandez/fontgres).
 
 - **Every face, with what CSS needs:** family and subfamily names, PostScript name, weight, style, stretch, monospacing, file path and collection index.
-- **CSS font matching:** give families in priority order with a weight, style and stretch, and get back the one face a browser would pick. Generic names such as `sans-serif` work too.
+- **CSS font matching:** give families in priority order with a weight, style and stretch, and get back the best match by the CSS font matching rules. A generic name such as `sans-serif` stands for one family (Arial, for example), not a fallback list.
 - **Loaded once:** the fonts are read on the first call and kept until you call `reload()`.
 
 ## Platform support
@@ -66,7 +66,7 @@ const helvetica = await getFaces({ family: "Helvetica Neue" });
 // The family names, sorted
 const families = await getFamilies();
 
-// The face a browser would use for font-family: "Helvetica Neue", sans-serif; font-weight: 700
+// The best face for font-family: "Helvetica Neue", sans-serif; font-weight: 700
 try {
   const face = await queryFace({ families: ["Helvetica Neue", "sans-serif"], weight: 700 });
   console.log(face.postScriptName, face.path);
@@ -107,7 +107,7 @@ interface Face {
 }
 ```
 
-Every command rejects with `{ kind, message }`, where `kind` is `noFamilies`, `weightOutOfRange`, `noMatch` or `unsupportedPlatform`.
+A command's own failures reject with `{ kind, message }`, where `kind` is `noFamilies`, `weightOutOfRange`, `noMatch` or `unsupportedPlatform`; `isFontgresError` tells them apart. Tauri itself rejects invalid arguments (an unknown style keyword, say) and missing permissions with a plain string.
 
 Families whose name starts with `.` (Apple's private system UI faces, such as `.SF NS`) are left out: CSS cannot use them by name.
 

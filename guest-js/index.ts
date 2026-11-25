@@ -60,7 +60,10 @@ export interface FaceQuery {
   stretch?: Stretch;
 }
 
-/** Why a command failed. Every command rejects with this shape. */
+/**
+ * Why a command failed. A command's own failures reject with this shape;
+ * Tauri rejects invalid arguments and missing permissions with a plain string.
+ */
 export interface FontgresError {
   kind: "noFamilies" | "weightOutOfRange" | "noMatch" | "unsupportedPlatform";
   message: string;

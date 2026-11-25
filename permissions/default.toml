@@ -1,5 +1,5 @@
 "$schema" = "schemas/schema.json"
 
 [default]
-description = "Default permissions for the plugin"
-permissions = ["allow-get-system-fonts"]
+description = "Allows every command: listing the faces and families, querying a face and reloading the fonts."
+permissions = ["allow-get-faces", "allow-get-families", "allow-query-face", "allow-reload"]

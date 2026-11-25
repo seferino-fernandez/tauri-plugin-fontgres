@@ -1,76 +1,76 @@
-use fontdb::{Database, Source, Style};
-use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
-use tauri::command;
+//! The commands JavaScript invokes as `plugin:fontgres|<name>`.
 
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub enum SystemFontStyle {
-    Normal,
-    Italic,
-    Oblique,
+#[cfg(desktop)]
+mod desktop {
+    use fontgres_core::models::FontQuery;
+    use tauri::State;
+
+    use crate::fonts::{self, Fonts};
+    use crate::{Error, Face};
+
+    /// Lists the faces, optionally only those of one family.
+    #[tauri::command]
+    pub(crate) async fn get_faces(
+        fonts: State<'_, Fonts>,
+        family: Option<String>,
+    ) -> Result<Vec<Face>, Error> {
+        Ok(fonts::faces(&fonts.get(), family.as_deref()))
+    }
+
+    /// Lists the family names.
+    #[tauri::command]
+    pub(crate) async fn get_families(fonts: State<'_, Fonts>) -> Result<Vec<String>, Error> {
+        Ok(fonts::families(&fonts.get()))
+    }
+
+    /// Returns the face that best matches a CSS-style query.
+    #[tauri::command]
+    pub(crate) async fn query_face(
+        fonts: State<'_, Fonts>,
+        query: FontQuery,
+    ) -> Result<Face, Error> {
+        fonts::query(&fonts.get(), &query)
+    }
+
+    /// Reads the system fonts again.
+    #[tauri::command]
+    pub(crate) async fn reload(fonts: State<'_, Fonts>) -> Result<(), Error> {
+        fonts.reload();
+        Ok(())
+    }
 }
 
-#[derive(Clone, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct SystemFont {
-    pub id: String,
-    pub name: String,
-    pub font_name: String,
-    pub path: String,
-    pub weight: u16,
-    pub style: SystemFontStyle,
-    pub monospaced: bool,
+#[cfg(desktop)]
+pub(crate) use desktop::*;
+
+#[cfg(mobile)]
+mod mobile {
+    use serde::de::IgnoredAny;
+
+    use crate::{Error, Face};
+
+    #[tauri::command]
+    pub(crate) async fn get_faces(family: Option<String>) -> Result<Vec<Face>, Error> {
+        drop(family);
+        Err(Error::UnsupportedPlatform)
+    }
+
+    #[tauri::command]
+    pub(crate) async fn get_families() -> Result<Vec<String>, Error> {
+        Err(Error::UnsupportedPlatform)
+    }
+
+    #[tauri::command]
+    pub(crate) async fn query_face(query: IgnoredAny) -> Result<Face, Error> {
+        let IgnoredAny = query;
+        Err(Error::UnsupportedPlatform)
+    }
+
+    #[tauri::command]
+    pub(crate) async fn reload() -> Result<(), Error> {
+        Err(Error::UnsupportedPlatform)
+    }
 }
 
-/// Get all fonts installed on the system.
-///
-/// # Example
-/// ```
-/// use tauri_plugin_fontgres::get_system_fonts;
-///
-/// let fonts = get_system_fonts().await;
-/// ```
-#[command]
-pub async fn get_system_fonts() -> Vec<SystemFont> {
-    let mut db = Database::new();
-
-    db.load_system_fonts();
-
-    let mut seen = HashSet::new();
-
-    db.faces()
-        .filter_map(|font| match &font.source {
-            Source::File(path) => {
-                let name = font.families[0].0.clone();
-
-                if name.starts_with('.') {
-                    return None;
-                }
-
-                let style = match font.style {
-                    Style::Normal => SystemFontStyle::Normal,
-                    Style::Italic => SystemFontStyle::Italic,
-                    Style::Oblique => SystemFontStyle::Oblique,
-                };
-
-                let font = SystemFont {
-                    id: font.id.to_string(),
-                    name,
-                    font_name: font.post_script_name.clone(),
-                    path: path.to_string_lossy().to_string(),
-                    weight: font.weight.0,
-                    style,
-                    monospaced: font.monospaced,
-                };
-
-                if seen.insert((font.name.clone(), font.path.clone())) {
-                    Some(font)
-                } else {
-                    None
-                }
-            }
-            Source::Binary(_) => None,
-            Source::SharedFile(..) => None,
-        })
-        .collect()
-}
+#[cfg(mobile)]
+pub(crate) use mobile::*;

@@ -8,7 +8,7 @@ mod commands;
 pub use commands::*;
 
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-    Builder::new("system-fonts")
+    Builder::new("fontgres")
         .invoke_handler(tauri::generate_handler![commands::get_system_fonts])
         .build()
 }

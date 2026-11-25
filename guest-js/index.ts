@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 
 export const COMMAND = {
-  GET_SYSTEM_FONTS: "plugin:system-fonts|get_system_fonts",
+  GET_SYSTEM_FONTS: "plugin:fontgres|get_system_fonts",
 };
 
 export type SystemFontStyle = "normal" | "italic" | "oblique";
@@ -20,7 +20,7 @@ export interface SystemFont {
  * Get all fonts installed on the system.
  *
  * @example
- * import { getSystemFonts } from "tauri-plugin-system-fonts-api";
+ * import { getSystemFonts } from "tauri-plugin-fontgres-api";
  *
  * const fonts = await getSystemFonts();
  */

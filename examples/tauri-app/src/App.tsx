@@ -3,7 +3,7 @@ import { Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { toString } from "es-toolkit/compat";
 import { useState } from "react";
-import { SystemFont, getSystemFonts } from "tauri-plugin-system-fonts-api";
+import { SystemFont, getSystemFonts } from "tauri-plugin-fontgres-api";
 
 const App = () => {
   const [fonts, setFonts] = useState<SystemFont[]>([]);

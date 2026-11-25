@@ -1,4 +1,4 @@
-# tauri-plugin-system-fonts
+# tauri-plugin-fontgres
 
 > This plugin only works on tauri v2, if you need the v1 plugin, feel free to submit a PR!
 
@@ -19,13 +19,13 @@ Support getting all fonts installed on your system.
 ## Install
 
 ```shell
-cargo add tauri-plugin-system-fonts
+cargo add tauri-plugin-fontgres
 ```
 
 You can install the JavaScript Guest bindings using your preferred JavaScript package manager:
 
 ```shell
-pnpm add tauri-plugin-system-fonts-api
+pnpm add tauri-plugin-fontgres-api
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ pnpm add tauri-plugin-system-fonts-api
 ```diff
 pub fn run() {
     tauri::Builder::default()
-+       .plugin(tauri_plugin_system_fonts::init())
++       .plugin(tauri_plugin_fontgres::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -48,7 +48,7 @@ pub fn run() {
     ...
     "permissions": [
         ...
-+       "system-fonts:default"
++       "fontgres:default"
     ]
 }
 ```
@@ -56,7 +56,7 @@ pub fn run() {
 Afterwards all the plugin's APIs are available through the JavaScript guest bindings:
 
 ```ts
-import { getSystemFonts } from "tauri-plugin-system-fonts-api";
+import { getSystemFonts } from "tauri-plugin-fontgres-api";
 
 const fonts = await getSystemFonts();
 ```
@@ -70,7 +70,7 @@ const fonts = await getSystemFonts();
 ## Example
 
 ```shell
-git clone https://github.com/ayangweb/tauri-plugin-system-fonts.git
+git clone https://github.com/seferino-fernandez/tauri-plugin-fontgres.git
 ```
 
 ```shell

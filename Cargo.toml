@@ -1,15 +1,16 @@
 [package]
-name = "tauri-plugin-system-fonts"
-version = "2.0.2"
-authors = [ "ayangweb" ]
-description = "Support getting all fonts installed on your system."
-repository = "https://github.com/ayangweb/tauri-plugin-system-fonts"
-keywords = ["tauri", "tauri-plugin", "font", "fonts", "system-fonts"]
+name = "tauri-plugin-fontgres"
+version = "0.1.0"
+authors = ["ayangweb", "Seferino Fernandez"]
+description = "Tauri v2 plugin that lists the system's fonts and answers CSS-style font queries, built on fontgres."
+repository = "https://github.com/seferino-fernandez/tauri-plugin-fontgres"
+keywords = ["tauri", "tauri-plugin", "fonts", "system-fonts", "fontgres"]
+categories = ["gui", "text-processing"]
 license = "MIT"
-edition = "2021"
-rust-version = "1.77.2"
+edition = "2024"
+rust-version = "1.100"
 exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]
-links = "tauri-plugin-system-fonts"
+links = "tauri-plugin-fontgres"
 
 [dependencies]
 tauri = { version = "2" }

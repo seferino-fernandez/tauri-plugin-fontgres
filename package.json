@@ -1,22 +1,25 @@
 {
-  "name": "tauri-plugin-system-fonts-api",
-  "version": "2.0.2",
-  "author": "ayangweb",
-  "description": "Support getting all fonts installed on your system.",
+  "name": "tauri-plugin-fontgres-api",
+  "version": "0.1.0",
+  "author": "Seferino Fernandez",
+  "contributors": [
+    "ayangweb"
+  ],
+  "description": "JavaScript bindings for tauri-plugin-fontgres: list the system's fonts and answer CSS-style font queries in Tauri v2.",
   "keywords": [
     "tauri",
     "tauri-plugin",
     "font",
     "fonts",
-    "system-font",
-    "system-fonts"
+    "system-fonts",
+    "fontgres"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ayangweb/tauri-plugin-system-fonts.git"
+    "url": "git+https://github.com/seferino-fernandez/tauri-plugin-fontgres.git"
   },
-  "homepage": "https://github.com/ayangweb/tauri-plugin-system-fonts#readme",
-  "bugs": "https://github.com/ayangweb/tauri-plugin-system-fonts/issues",
+  "homepage": "https://github.com/seferino-fernandez/tauri-plugin-fontgres#readme",
+  "bugs": "https://github.com/seferino-fernandez/tauri-plugin-fontgres/issues",
   "license": "MIT",
   "type": "module",
   "types": "./dist-js/index.d.ts",

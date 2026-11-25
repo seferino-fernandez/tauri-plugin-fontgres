@@ -26,7 +26,7 @@ pub struct SystemFont {
 ///
 /// # Example
 /// ```
-/// use tauri_plugin_system_fonts::get_system_fonts;
+/// use tauri_plugin_fontgres::get_system_fonts;
 ///
 /// let fonts = get_system_fonts().await;
 /// ```

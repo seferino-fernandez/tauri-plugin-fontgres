@@ -18,7 +18,7 @@ Default permissions for the plugin
 <tr>
 <td>
 
-`system-fonts:allow-get-system-fonts`
+`fontgres:allow-get-system-fonts`
 
 </td>
 <td>
@@ -31,7 +31,7 @@ Enables the get_system_fonts command without any pre-configured scope.
 <tr>
 <td>
 
-`system-fonts:deny-get-system-fonts`
+`fontgres:deny-get-system-fonts`
 
 </td>
 <td>
